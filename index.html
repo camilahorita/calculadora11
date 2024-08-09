@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora 11 </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f5f7; 
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 600px; /* Aumentado para comportar as colunas */
+            text-align: center;
+            border: 1px solid #e0e0e0; 
+        }
+
+        #title {
+            font-size: 22px;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 2px;
+            margin-bottom: 10px;
+            font-size: 22px;
+            color: rgb(6, 44, 53);
+        }
+
+        .prazo {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 18px;
+            color: rgb(71, 71, 71);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        label {
+          font-size: 18px;
+        }
+
+        button {
+            background-color: rgb(6, 44, 53);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Mover o botão para baixo das opções */
+        }
+
+        button:hover {
+            background-color: rgb(0, 35, 44);
+        }
+
+        #resultado {
+            display: none;
+            background-color: #f0f0f0;
+            color: rgb(71, 71, 71);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: left;
+            border: 1px solid #e0e0e0; 
+        }
+
+        .column-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .column {
+            flex: 1;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .column-container {
+                flex-direction: column;
+            }
+
+            .column {
+                margin-bottom: 10px;
+            }
+
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora 11</h2>
+        
+        <div class="form-group">
+            <label for="valorViagem">Valor da Viagem (R$):</label>
+            <input type="number" id="valorViagem" placeholder="Digite o valor da viagem">
+        </div>
+
+        <div class="form-group">
+            <label for="prazoMeses">Prazo de Pagamento (meses):</label>
+            <input type="number" id="prazoMeses" placeholder="Digite o prazo em meses">
+        </div>
+
+        <button onclick="mostrarDados()">Mostrar os Dados</button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        function calcularValores(valor, prazo, taxaJuros) {
+            if (taxaJuros === 0) {
+                const pagamentoMensal = valor / prazo;
+                return {
+                    pagamentoMensal: pagamentoMensal.toFixed(2),
+                    custoTotal: valor.toFixed(2)
+                };
+            } else {
+                const taxa = taxaJuros / 100;
+                const pagamentoMensal = (valor * taxa * Math.pow(1 + taxa, prazo)) / (Math.pow(1 + taxa, prazo) - 1);
+                const custoTotal = pagamentoMensal * prazo;
+                return {
+                    pagamentoMensal: pagamentoMensal.toFixed(2),
+                    custoTotal: custoTotal.toFixed(2)
+                };
+            }
+        }
+
+        function mostrarDados() {
+            const resultadoDiv = document.getElementById('resultado');
+            const valorViagem = parseFloat(document.getElementById('valorViagem').value);
+            const prazoMeses = parseInt(document.getElementById('prazoMeses').value);
+
+            resultadoDiv.style.display = 'block';
+
+            const jurosEmprestimo = 5.5; // 5,5% a.m.
+            const jurosCartaoCredito = 2; // 2% a.m.
+            const jurosPoupanca = 0; // 0% a.m.
+
+            const emprestimo = calcularValores(valorViagem, prazoMeses, jurosEmprestimo);
+            const cartaoCredito = calcularValores(valorViagem, prazoMeses, jurosCartaoCredito);
+            const poupanca = calcularValores(valorViagem, prazoMeses, jurosPoupanca);
+
+            resultadoDiv.innerHTML = `
+                <h3 class="prazo"> Prazo de ${prazoMeses} meses </h3>
+                <div class="column-container">
+                    <div class="column">
+                        <h3>Empréstimo</h3>
+                        <p><strong>Taxa de Juros:</strong> ${jurosEmprestimo}% a.m.</p>
+                        <p><strong>Pagamento Mensal:</strong> R$ ${emprestimo.pagamentoMensal}</p>
+                        <p><strong>Custo Total com Juros:</strong> R$ ${emprestimo.custoTotal}</p>
+                    </div>
+                    <div class="column">
+                        <h3>Cartão de Crédito</h3>
+                        <p><strong>Taxa de Juros:</strong> ${jurosCartaoCredito}% a.m.</p>
+                        <p><strong>Pagamento Mensal:</strong> R$ ${cartaoCredito.pagamentoMensal}</p>
+                        <p><strong>Custo Total com Juros:</strong> R$ ${cartaoCredito.custoTotal}</p>
+                    </div>
+                    <div class="column">
+                        <h3>Poupando o Dinheiro</h3>
+                        <p><strong>Taxa de Juros:</strong> ${jurosPoupanca}% a.m.</p>
+                        <p><strong>Pagamento Mensal:</strong> R$ ${poupanca.pagamentoMensal}</p>
+                        <p><strong>Custo Total:</strong> R$ ${poupanca.custoTotal}</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
