@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora 11 </title>
+    <title>Calculadora 11</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f5f7; 
+            background-color: #f4f5f7;
         }
 
         .container {
@@ -22,7 +22,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 600px; /* Aumentado para comportar as colunas */
             text-align: center;
-            border: 1px solid #e0e0e0; 
+            border: 1px solid #e0e0e0;
         }
 
         #title {
@@ -62,8 +62,9 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         label {
-          font-size: 18px;
+            font-size: 18px;
         }
 
         button {
@@ -90,7 +91,7 @@
             border-radius: 5px;
             margin-top: 20px;
             text-align: left;
-            border: 1px solid #e0e0e0; 
+            border: 1px solid #e0e0e0;
         }
 
         .column-container {
@@ -105,6 +106,13 @@
             border: 1px solid #e0e0e0;
             padding: 10px;
             border-radius: 5px;
+        }
+
+        #mensagemErro {
+            color: red;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -139,6 +147,7 @@
         <button onclick="mostrarDados()">Mostrar os Dados</button>
 
         <div id="resultado"></div>
+        <div id="mensagemErro">Por favor, insira valores válidos.</div>
     </div>
 
     <script>
@@ -162,8 +171,18 @@
 
         function mostrarDados() {
             const resultadoDiv = document.getElementById('resultado');
+            const mensagemErro = document.getElementById('mensagemErro');
             const valorViagem = parseFloat(document.getElementById('valorViagem').value);
             const prazoMeses = parseInt(document.getElementById('prazoMeses').value);
+
+            // Validando os valores de entrada
+            if (isNaN(valorViagem) || valorViagem <= 0 || isNaN(prazoMeses) || prazoMeses <= 0) {
+                mensagemErro.style.display = 'block';
+                resultadoDiv.style.display = 'none';
+                return;
+            } else {
+                mensagemErro.style.display = 'none';
+            }
 
             resultadoDiv.style.display = 'block';
 
